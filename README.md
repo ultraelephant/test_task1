@@ -33,7 +33,7 @@ tenant_list - количество экземпляров minio, записыв�
 
 Все комманды запускаются из папки в которой лежит Vagrantfile
 
-Создание пользователя с правом на чтение каталогов MinIO (/usr/local/share/{имя каталога})
+**Создание пользователя с правом на чтение каталогов MinIO (***/usr/local/share/{имя каталога}***)**
 ```bash
 ansible all -i .vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory -u vagrant --private-key ~/.vagrant.d/insecure_private_key -m user -a "name=minioreader" --become
 ```
