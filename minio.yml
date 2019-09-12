@@ -1,0 +1,77 @@
+- hosts: all
+  become: yes
+  become_method: sudo
+  vars:
+   tenant_list:
+    - name: "one"
+      int: "1"
+    - name: "two"
+      int: "2"
+
+  tasks:
+
+    - name: Creating MinIO user
+      user:
+       name: minio-user
+       shell: /sbin/nologin
+
+    - name: Install MinIO
+      get_url:
+       url: https://dl.minio.io/server/minio/release/linux-amd64/minio
+       dest: /usr/local/bin/minio
+       mode: '0775'
+       owner: minio-user
+       group: minio-user
+
+    - name: Create storage folders
+      file:
+        path: '/usr/local/share/{{ item.name }}'
+        state: directory
+        mode: '0755'
+        owner: minio-user
+        group: minio-user
+      with_items: "{{ tenant_list }}"
+
+    - name: Create MinIO etc
+      file:
+        path: /etc/minio
+        state: directory
+        mode: '0755'
+        owner: minio-user
+        group: minio-user
+
+    - name: Generate Config
+      template:
+        src: minio.j2
+        dest: '/etc/default/minio-{{ item.name }}'
+      with_items: "{{ tenant_list }}"
+
+    - name: Generate Systemd unit
+      template:
+        src: minio.service.j2
+        dest: '/etc/systemd/system/minio-{{ item.name }}.service'
+      with_items: "{{ tenant_list }}"
+
+    - name: Start MinIO
+      service:
+       name: minio-{{ item.name }}
+       state: started
+       enabled: yes
+      with_items: "{{ tenant_list }}"
+
+    - name: Install nginx
+      apt:
+       name: nginx
+       state: present
+
+    - name: Generate Nginx config
+      template:
+        src: minio.conf.j2
+        dest: '/etc/nginx/sites-enabled/minio{{ item.name }}.conf'
+      with_items: "{{ tenant_list }}"
+
+    - name: Start nginx
+      service:
+       name: nginx
+       state: restarted
+       enabled: yes
