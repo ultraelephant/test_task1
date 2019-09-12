@@ -27,7 +27,7 @@
       file:
         path: '/usr/local/share/{{ item.name }}'
         state: directory
-        mode: '0755'
+        mode: '0775'
         owner: minio-user
         group: minio-user
       with_items: "{{ tenant_list }}"
@@ -36,7 +36,7 @@
       file:
         path: /etc/minio
         state: directory
-        mode: '0755'
+        mode: '0775'
         owner: minio-user
         group: minio-user
 
