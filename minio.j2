@@ -1,0 +1,4 @@
+MINIO_VOLUMES=http://192.168.0.1{1...6}:900{{ item.int }}/usr/local/share/{{ item.name }}
+MINIO_OPTS="--address {{ ansible_enp0s8.ipv4.address }}:900{{ item.int }}"
+MINIO_ACCESS_KEY=admin
+MINIO_SECRET_KEY=password
