@@ -1,0 +1,35 @@
+vrrp_script chk_nginx {
+    script "pidof nginx"
+    interval 2
+    weight 10
+}
+
+vrrp_instance node123 {
+
+state {{ role }}
+
+interface enp0s8
+ 
+virtual_router_id 10
+
+priority {{ priority }}
+
+advert_int 4
+
+authentication {
+auth_type AH
+auth_pass 1111
+}
+
+        virtual_ipaddress {
+        192.168.0.101 dev enp0s8 label enp0s8:vrrp
+        192.168.0.102 dev enp0s8 label enp0s8:vrrp
+        192.168.0.103 dev enp0s8 label enp0s8:vrrp
+}
+
+    track_script {
+        chk_nginx
+    }
+
+
+}
