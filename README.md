@@ -37,3 +37,10 @@ tenant_list - количество экземпляров minio, записыв�
 ```bash
 ansible all -i .vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory -u vagrant --private-key ~/.vagrant.d/insecure_private_key -m user -a "name=minioreader" --become
 ```
+Создаётся пользователь входящий только в свою группу. Данный пользователь имеет минимальный набор прав, в том числе чтение из каталога MinIO
+
+**Создание пользователя с правом на запись каталогов MinIO (***/usr/local/share/{имя каталога}***)**
+```bash
+ansible all -i .vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory -u vagrant --private-key ~/.vagrant.d/insecure_private_key -m user -a "name=miniowriter groups=minio-user" --become
+```
+Создаётся пользователь входящий в свою группу и группу minio-user. Пользователи входящие в данную группу имею доступ на запись в каталоги MinIO.
