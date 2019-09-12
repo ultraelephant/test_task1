@@ -1,0 +1,26 @@
+- hosts: all
+  become: yes
+  become_method: sudo
+
+  tasks:
+
+    - name: Install keepalived
+      apt:
+       name: keepalived
+       state: present
+
+    - name: Generate Config
+      template:
+        src: keepalived.conf.j2
+        dest: /etc/keepalived/keepalived.conf
+
+    - name: Install keepalived
+      service:
+       name: keepalived
+       state: started 
+
+    - name: Start keepalived
+      service:
+       name: keepalived
+       state: started
+       enabled: yes
