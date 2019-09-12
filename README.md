@@ -44,3 +44,14 @@ ansible all -i .vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory
 ansible all -i .vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory -u vagrant --private-key ~/.vagrant.d/insecure_private_key -m user -a "name=miniowriter groups=minio-user" --become
 ```
 Создаётся пользователь входящий в свою группу и группу minio-user. Пользователи входящие в данную группу имею доступ на запись в каталоги MinIO.
+
+**Залить jpg файл**
+
+Создаём бакет с именем test. Айтентификационные данные соотвествуют тем, что были созданны из шаблона *minio.j2*
+```bash
+AWS_ACCESS_KEY=admin AWS_SECRET_KEY=password ansible localhost -m aws_s3 -a "bucket=test object=/README.md src=./README.md mode=put encrypt=no s3_url=http://192.168.0.11:9002"
+```
+Заливаем файл на созданный бакет. Айтентификационные данные соотвествуют тем, что были созданны из шаблона *minio.j2*
+```bash
+AWS_ACCESS_KEY=admin AWS_SECRET_KEY=password ansible -vvv localhost -m aws_s3 -a "bucket=test object='/test (1).jpg' src='./test (1).jpg' mode=put encrypt=no s3_url=http://192.168.0.11:9002"
+```
