@@ -49,9 +49,9 @@ ansible all -i .vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory
 
 Создаём бакет с именем test. Айтентификационные данные соотвествуют тем, что были созданны из шаблона *minio.j2*
 ```bash
-AWS_ACCESS_KEY=admin AWS_SECRET_KEY=password ansible localhost -m aws_s3 -a "bucket=test object=/README.md src=./README.md mode=put encrypt=no s3_url=http://192.168.0.11:9002"
+AWS_ACCESS_KEY=admin AWS_SECRET_KEY=password ansible localhost -m aws_s3 -a "bucket=test mode=create permission=public-read s3_url=http://192.168.0.11:9002""
 ```
 Заливаем файл на созданный бакет. Айтентификационные данные соотвествуют тем, что были созданны из шаблона *minio.j2*
 ```bash
-AWS_ACCESS_KEY=admin AWS_SECRET_KEY=password ansible -vvv localhost -m aws_s3 -a "bucket=test object='/test (1).jpg' src='./test (1).jpg' mode=put encrypt=no s3_url=http://192.168.0.11:9002"
+AWS_ACCESS_KEY=admin AWS_SECRET_KEY=password ansible localhost -m aws_s3 -a "bucket=test object='/test (1).jpg' src='./test (1).jpg' mode=put encrypt=no s3_url=http://192.168.0.11:9002"
 ```
